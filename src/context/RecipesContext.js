@@ -29,17 +29,11 @@ const RecipesProvider = (props) => {
         const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
         const response = await axios(url);
         setDrinkNameRecipes([]);
-        if (Object.keys(ingredientrecipes).length === 0) return null;
         setIngredientRecipes(response.data.drinks);
       };
       getIngredientRecipe();
     }
-  }, [
-    ingredientrecipesearch,
-    ingredient,
-    okingredientrequest,
-    ingredientrecipes,
-  ]);
+  }, [ingredientrecipesearch, ingredient, okingredientrequest]);
 
   // drinkname API call
   useEffect(() => {
@@ -48,12 +42,11 @@ const RecipesProvider = (props) => {
         const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drinkname}`;
         const response = await axios(url);
         setIngredientRecipes([]);
-        if (Object.keys(drinknamerecipes).length === 0) return null;
         setDrinkNameRecipes(response.data.drinks);
       };
       getDrinkNameRecipe();
     }
-  }, [drinknamerecipesearch, drinkname, okdrinknamerequest, drinknamerecipes]);
+  }, [drinknamerecipesearch, drinkname, okdrinknamerequest]);
 
   return (
     <RecipesContext.Provider
