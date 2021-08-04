@@ -30,7 +30,7 @@ function getModalStyle() {
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "absolute",
-    width: 350,
+    width: 400,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   scroll: { maxHeight: "500px", overflowY: "scroll", overflowX: "none" },
 }));
 
-const Recipe = ({ recipe }) => {
+const Recipe = ({ ingredientrecipe, drinknamerecipe }) => {
   const { setRecipeId, cocktailrecipe, setCocktailRecipe } =
     useContext(ModalContext);
 
@@ -58,8 +58,8 @@ const Recipe = ({ recipe }) => {
     for (let i = 1; i < 16; i++) {
       if (ingredient[`strIngredient${i}`]) {
         ingredients.push(
-          <li>
-            {ingredient[`strIngredient${i}`]} {ingredient[`strMesure${i}`]}
+          <li className="m-1 p-0">
+            {ingredient[`strIngredient${i}`]} - {ingredient[`strMeasure${i}`]}
           </li>
         );
       }
@@ -67,51 +67,138 @@ const Recipe = ({ recipe }) => {
     return ingredients;
   };
   return (
-    <div className="col-md-4 mb-3">
-      <div className="card text-center">
-        <h4 className="card-header text-wrap p-3">{recipe.strDrink}</h4>
-        <img
-          src={recipe.strDrinkThumb}
-          alt={recipe.strDrink}
-          className="card-img-top"
-        />
-        <div className="card-body">
-          <button
-            type="button"
-            className="btn btn-block btn-danger w-100 p-2"
-            onClick={() => {
-              setRecipeId(recipe.idDrink);
-              handleOpen();
-            }}
-          >
-            See Recipe
-          </button>
-          <Modal
-            open={open}
-            onClose={() => {
-              setRecipeId(null);
-              setCocktailRecipe({});
-              handleClose();
-            }}
-          >
-            <div style={modalStyle} className={classes.paper}>
-              <div className={classes.scroll}>
-                <h2>{cocktailrecipe.strDrink}</h2>
-                <h3 className="mt-4">Instructions</h3>
-                <p>{cocktailrecipe.strInstructions}</p>
-                <img
-                  src={cocktailrecipe.strDrinkThumb}
-                  alt={cocktailrecipe.strDrinkThumb}
-                  className="img-fluid my-4"
-                />
-                <h3>Ingredients & Quantities</h3>
-                <ul>{showIngredients(cocktailrecipe)}</ul>
-              </div>
+    <>
+      {ingredientrecipe ? (
+        <div className="col-md-4 mb-3">
+          <div className="card text-center">
+            <h4 className="card-header text-wrap p-3">
+              {ingredientrecipe.strDrink}
+            </h4>
+            <img
+              src={ingredientrecipe.strDrinkThumb}
+              alt={ingredientrecipe.strDrink}
+              className="card-img-top"
+            />
+            <div className="card-body">
+              <button
+                type="button"
+                className="btn btn-block btn-danger w-100 p-2"
+                onClick={() => {
+                  setRecipeId(ingredientrecipe.idDrink);
+                  handleOpen();
+                }}
+              >
+                See Recipe
+              </button>
+              <Modal
+                open={open}
+                onClose={() => {
+                  setRecipeId(null);
+                  setCocktailRecipe({});
+                  handleClose();
+                }}
+              >
+                <div style={modalStyle} className={classes.paper}>
+                  <div className={classes.scroll}>
+                    <h3>{cocktailrecipe.strDrink}</h3>
+                    <h4 className="mt-3">Ingredients & Quantities</h4>
+                    <ul className="row pl-0">
+                      {showIngredients(cocktailrecipe)}
+                    </ul>
+
+                    <img
+                      src={cocktailrecipe.strDrinkThumb}
+                      alt={cocktailrecipe.strDrinkThumb}
+                      className="img-fluid my-1"
+                    />
+                    <h4 className="mt-4">Instructions</h4>
+                    <p className="fst-italic pe-3">
+                      {cocktailrecipe.strInstructions}
+                    </p>
+
+                    <button
+                      type="button"
+                      className="btn btn-block btn-danger mt-2 w-100"
+                      onClick={() => {
+                        setRecipeId(null);
+                        setCocktailRecipe({});
+                        handleClose();
+                      }}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </Modal>
             </div>
-          </Modal>
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className="col-md-4 mb-3">
+          <div className="card text-center">
+            <h4 className="card-header text-wrap p-3">
+              {drinknamerecipe.strDrink}
+            </h4>
+            <img
+              src={drinknamerecipe.strDrinkThumb}
+              alt={drinknamerecipe.strDrink}
+              className="card-img-top"
+            />
+            <div className="card-body">
+              <button
+                type="button"
+                className="btn btn-block btn-danger w-100 p-2"
+                onClick={() => {
+                  setRecipeId(drinknamerecipe.idDrink);
+                  handleOpen();
+                }}
+              >
+                See Recipe
+              </button>
+              <Modal
+                open={open}
+                onClose={() => {
+                  setRecipeId(null);
+                  setCocktailRecipe({});
+                  handleClose();
+                }}
+              >
+                <div style={modalStyle} className={classes.paper}>
+                  <div className={classes.scroll}>
+                    <h2>{cocktailrecipe.strDrink}</h2>
+                    <h3 className="mt-4">Instructions</h3>
+                    <p className="fst-italic pe-3">
+                      {cocktailrecipe.strInstructions}
+                    </p>
+                    <img
+                      src={cocktailrecipe.strDrinkThumb}
+                      alt={cocktailrecipe.strDrinkThumb}
+                      className="img-fluid my-4"
+                    />
+
+                    <h3>Ingredients & Quantities</h3>
+                    <ul className="row pl-0">
+                      {showIngredients(cocktailrecipe)}
+                    </ul>
+                    <button
+                      type="button"
+                      className="btn btn-block btn-danger mt-2 w-100"
+                      onClick={() => {
+                        setRecipeId(null);
+                        setCocktailRecipe({});
+                        handleClose();
+                      }}
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </Modal>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

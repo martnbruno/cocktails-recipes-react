@@ -2,7 +2,7 @@
 const Header = () => {
   return (
     <header className="bg-alert">
-      <h1>The Cocktail's Corner</h1>
+      <h1 className="fs-1">The Cocktail's Corner</h1>
     </header>
   );
 };

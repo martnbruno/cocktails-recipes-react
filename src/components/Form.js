@@ -1,94 +1,128 @@
-// 3. Crear Form
-// 7. Importar useContext. Recibe CategoriesContext como argumento. Traer el value categories.
-// 9. Pasar respuesta de la API (categories) al Form.
-// 10. Iterar sobre el arreglo categories traido de la API y retornar un option por cada una en el select.
-// 11. Crear state search, setSearch que inicia como un objeto con name y category como strings, y que almacena la busqueda realizada en los input.
-// 12. Crear funcion getInputValues que onChange de los input actualiza setSearch con los valores seleccionados.
-// 20. Importar RecipesContext. usar useContext que recibe RecipesContext como argumento. Traer el value setRecipeSearch.
-// 21. Pasar la funcion setRecipeSearch al form para que se ejecute onSubmit. Es importante que hay que pasarle search como argumento porque sino no sabe el nombre y la categoria que tiene que buscar en la API.
-// 24. Importar setOkRequest desde RecipesContext e incluirlo en Form como true una vez que pasa la validacion onSubmit.
-
 import { useContext, useState } from "react";
-import { CategoriesContext } from "../context/CategoriesContext";
 import { RecipesContext } from "../context/RecipesContext";
 
 const Form = () => {
-  const { categories } = useContext(CategoriesContext);
+  const {
+    setIngredientRecipeSearch,
+    setOkIngredientRequest,
+    setDrinkNameRecipeSearch,
+    setOkDrinkNameRequest,
+  } = useContext(RecipesContext);
 
-  const { setRecipeSearch, setOkRequest } = useContext(RecipesContext);
-
-  const [search, setSearch] = useState({
-    ingredient: "",
-    category: "",
+  const [drinknamesearch, setDrinkNameSearch] = useState({
+    drinkname: "",
   });
 
-  const { ingredient, category } = search;
+  const [ingredientsearch, setIngredientSearch] = useState({
+    ingredient: "",
+  });
 
-  const [error, setError] = useState(false);
+  const { ingredient } = ingredientsearch;
 
-  const getInputValues = (e) => {
-    setSearch({
-      ...search,
+  const { drinkname } = drinknamesearch;
+
+  const [ingredienterror, setIngredientError] = useState(false);
+
+  const [drinknameerror, setDrinkNameError] = useState(false);
+
+  const getIngredientValue = (e) => {
+    setIngredientSearch({
+      ...ingredientsearch,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const getDrinkNameValue = (e) => {
+    setDrinkNameSearch({
+      ...drinknamesearch,
       [e.target.name]: e.target.value,
     });
   };
 
   return (
-    <form
-      className="col-12"
-      onSubmit={(e) => {
-        e.preventDefault();
-        if (ingredient.trim() === "" || category.trim() === "") {
-          setError(true);
-          return;
-        }
-        setError(false);
-        setRecipeSearch(search);
-        setOkRequest(true);
-      }}
-    >
-      {error ? (
-        <p className="alert alert-danger text-center p-2">
-          Both fields are required.
-        </p>
-      ) : null}
-      <fieldset className="text-center">
-        <legend>Search Cocktail's Recipes by Category and Ingredient</legend>
-      </fieldset>
+    <div className="row col-12 m-1 ">
+      <form
+        className="col-12"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (ingredient.trim() === "") {
+            setIngredientError(true);
+            return;
+          }
+          setIngredientError(false);
+          setIngredientRecipeSearch(ingredientsearch);
+          setOkIngredientRequest(true);
+        }}
+      >
+        <fieldset className="text-center">
+          <legend className="fs-4">
+            Search Cocktail's Recipes by Ingredient or Name{" "}
+          </legend>
+        </fieldset>
+        {ingredienterror ? (
+          <p className="alert alert-danger text-center p-2 mt-4">
+            Please add an ingredient.
+          </p>
+        ) : null}
+        <div className="row mt-4 justify-content-center">
+          <div className="col-md-6 col-xxl-5">
+            <input
+              type="text"
+              name="ingredient"
+              className="form-control p-2 mt-2"
+              placeholder="Search by Ingredient"
+              onChange={getIngredientValue}
+            />
+          </div>
+          <div className="col-md-6 col-xxl-3">
+            <input
+              type="submit"
+              className="btn btn-block btn-danger w-100 p-2 align-self-center mt-2"
+              value="Search Recipe"
+            />
+          </div>
+        </div>
+      </form>
 
-      <div className="row mt-4">
-        <div className="col-md-4">
-          <input
-            type="text"
-            name="ingredient"
-            className="form-control p-2 m-1"
-            placeholder="Search by Ingredient"
-            onChange={getInputValues}
-          />
+      <form
+        className="col-md-12"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (drinkname.trim() === "") {
+            setDrinkNameError(true);
+            return;
+          }
+          setDrinkNameError(false);
+          setDrinkNameRecipeSearch(drinknamesearch);
+          setOkDrinkNameRequest(true);
+        }}
+      >
+        {drinknameerror ? (
+          <p className="alert alert-danger text-center p-2 mt-4 w-100">
+            Please add a name.
+          </p>
+        ) : null}
+
+        <div className="row mt-4 justify-content-center">
+          <div className="col-md-6 col-xxl-5">
+            <input
+              type="text"
+              name="drinkname"
+              className="form-control p-2 mt-2"
+              placeholder="Search by Name"
+              onChange={getDrinkNameValue}
+            />
+          </div>
+          <div className="col-md-6 col-xxl-3">
+            <input
+              type="submit"
+              className="btn btn-block btn-danger w-100 p-2 mt-2  align-self-center"
+              value="Search Recipe"
+            />
+          </div>
         </div>
-        <div className="col-md-4">
-          <select
-            name="category"
-            className="form-control p-2 m-1"
-            onChange={getInputValues}
-          >
-            <option value="">Search by Category</option>
-            {categories.map((category) => (
-              <option key={category.strCategory} value={category.strCategory}>
-                {category.strCategory}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="col-md-4">
-          <input
-            type="submit"
-            className="btn btn-block btn-danger w-100 p-2 m-1 align-self-center"
-            value="Search Recipe"
-          />
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   );
 };
 
