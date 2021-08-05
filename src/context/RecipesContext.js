@@ -22,12 +22,17 @@ const RecipesProvider = (props) => {
 
   const { drinkname } = drinknamerecipesearch;
 
+  const [error, setError] = useState();
+
   // ingredient API call
   useEffect(() => {
     if (okingredientrequest) {
       const getIngredientRecipe = async () => {
         const url = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${ingredient}`;
-        const response = await axios(url);
+        const response = await axios(url).catch((error) => {
+          setError(error);
+        });
+        setError(false);
         setDrinkNameRecipes([]);
         setIngredientRecipes(response.data.drinks);
       };
@@ -40,14 +45,16 @@ const RecipesProvider = (props) => {
     if (okdrinknamerequest) {
       const getDrinkNameRecipe = async () => {
         const url = `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drinkname}`;
-        const response = await axios(url);
+        const response = await axios(url).catch((error) => {
+          setError(error);
+        });
+        setError(false);
         setIngredientRecipes([]);
         setDrinkNameRecipes(response.data.drinks);
       };
       getDrinkNameRecipe();
     }
   }, [drinknamerecipesearch, drinkname, okdrinknamerequest]);
-
   return (
     <RecipesContext.Provider
       value={{
@@ -57,6 +64,7 @@ const RecipesProvider = (props) => {
         ingredientrecipes,
         setIngredientRecipeSearch,
         setOkIngredientRequest,
+        error,
       }}
     >
       {props.children}

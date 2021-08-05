@@ -60,7 +60,7 @@ const Form = () => {
           </legend>
         </fieldset>
         {ingredienterror ? (
-          <p className="alert alert-danger text-center p-2 mt-4">
+          <p className="alert alert-danger text-center p-2 mt-2 m-auto col-md-6 col-xxl-6 row justify-content-center">
             Please add an ingredient.
           </p>
         ) : null}
@@ -98,7 +98,7 @@ const Form = () => {
         }}
       >
         {drinknameerror ? (
-          <p className="alert alert-danger text-center p-2 mt-4 w-100">
+          <p className="alert alert-danger text-center p-2 mt-2 m-auto col-md-6 col-xxl-6 row justify-content-center">
             Please add a name.
           </p>
         ) : null}
